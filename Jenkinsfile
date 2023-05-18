@@ -23,9 +23,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.withRegistry("${ECR_REGISTRY_URL}", 'docker-credentials') {
-                        def dockerImage = docker.build("your_docker_image:${DOCKER_IMAGE_TAG}", '.')
-                        dockerImage.push()
+                    def dockerImage = docker.build('your_docker_image_name')
+                    dockerImage.tag('your_docker_registry_url/your_docker_image_name:your_image_tag')
+                    dockerImage.push()
                     }
                 }
             }
