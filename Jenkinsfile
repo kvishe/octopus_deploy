@@ -24,21 +24,19 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def dockerImage = docker.build('${APP_NAME}')
-                    dockerImage.tag('${ECR_REGISTRY_URL}/${APP_NAME}:${IMAGE_TAG}')
-                    dockerImage.push()
+                    app = docker.build("underwater")
                     }
                 }
             }
         
-        stage('Deploy with Octopus') {
+        stage('Deploy') {
             steps {
-                script {
-                    sh "octo push --package=${APP_NAME}:${IMAGE_TAG} --replace-existing --server=${OCTOPUS_SERVER_URL} --apiKey=${OCTOPUS_API_KEY}"
-                    sh "octo create-release --project=${OCTOPUS_PROJECT_NAME} --version=${IMAGE_TAG} --server=${OCTOPUS_SERVER_URL} --apiKey=${OCTOPUS_API_KEY}"
-                    sh "octo deploy-release --project=${OCTOPUS_PROJECT_NAME} --deployTo=${OCTOPUS_ENVIRONMENT_NAME} --server=${OCTOPUS_SERVER_URL} --apiKey=${OCTOPUS_API_KEY}"
+                script{
+                    docker.withRegistry('public.ecr.aws/w2f1s1x4/ecstest', 'ecr:us-east-1:aws-credentials') {
+                    app.push("${env.BUILD_NUMBER}")
+                    app.push("latest")
+                    }
                 }
             }
-        }
     }
 }
