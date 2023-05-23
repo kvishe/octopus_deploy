@@ -18,10 +18,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 script{
-                    docker.withRegistry('public.ecr.aws/w2f1s1x4/ecstest', 'ecr:us-east-1:aws-credentials') {
-                    app.push("${env.BUILD_NUMBER}")
-                    app.push("latest")
-                    }
+                 sh(label: 'ECR login and docker push', script:
+                 '''
+                  #!/bin/bash
+                    echo "Authenticate with ECR"
+                    docker login --username AWS --password $(aws ecr-public get-login-password --region us-east-1) public.ecr.aws/w2f1s1x4
+          
+                    docker tag underwater:latest public.ecr.aws/w2f1s1x4/ecstest:latest
+                    docker push public.ecr.aws/w2f1s1x4/ecstest:latest
+                 '''.stripIndent())
                 }
             }
         }
