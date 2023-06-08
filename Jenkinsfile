@@ -1,10 +1,10 @@
 pipeline {
     agent any
     parameters {
-        string(name: 'ECR_REPO_URL', description: 'URL of ECR repo')
-        string(name: 'IMAGE_NAME', description: 'Name of the Image')
-        string(name: 'ENV', description: 'Octopus Environment')
-        string(name: 'PROJECT', description: 'Octopus Project Name')
+        string(name: 'ECR_REPO_URL', defaultValue: "https://215598677274.dkr.ecr.us-east-1.amazonaws.com", description: 'URL of ECR repo')
+        string(name: 'IMAGE_NAME', defaultValue: "underwater", description: 'Name of the Image')
+        string(name: 'ENV', defaultValue: "Development", description: 'Octopus Environment')
+        string(name: 'PROJECT', defaultValue: "Test", description: 'Octopus Project Name')
     }
     stages {
         stage('Checkout') {
