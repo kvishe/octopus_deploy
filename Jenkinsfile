@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy'){
+        stage('Deploy through Octopus'){
             steps {
                 script{
                     octopusCreateRelease additionalArgs: '', cancelOnTimeout: false, channel: '', defaultPackageVersion: '', deployThisRelease: false, deploymentTimeout: '', environment: "${ENV}", jenkinsUrlLinkback: false, project: "${PROJECT}", releaseNotes: false, releaseNotesFile: '', releaseVersion: "1.0.${BUILD_NUMBER}", tenant: '', tenantTag: '', toolId: 'Default', verboseLogging: false, waitForDeployment: false
